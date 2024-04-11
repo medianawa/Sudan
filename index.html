@@ -64,14 +64,23 @@
 
     L.esri.basemapLayer('Gray').addTo(map);
 
-    var trailheads = L.esri
+    var admn2 = L.esri
         .featureLayer({
           url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
           //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
           style: { color: "gray", weight: 0.25 }
         });
 
-        trailheads.addTo(map);
+        adm2.addTo(map);
+    
+    var admn1 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
+          //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
+          style: { color: "gray", weight: 0.75 }
+        });
+
+        admn1.addTo(map);
 
     Papa.parse('./data/data.csv', {
       download: true,
