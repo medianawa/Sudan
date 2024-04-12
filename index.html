@@ -64,13 +64,13 @@
 
     L.esri.basemapLayer('Gray').addTo(map);
 
-    var admn1 = L.esri
-        .featureLayer({
-          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
-          style: { color: "lightgray", weight: 1.5,  dashArray: "2, 3", dashOffset: "2" }
-        });
+    // var admn1 = L.esri
+    //     .featureLayer({
+    //       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
+    //       style: { color: "lightgray", weight: 1.5,  dashArray: "2, 3", dashOffset: "2" }
+    //     });
 
-        admn1.addTo(map);
+    //     admn1.addTo(map);
     
     var admn2 = L.esri
         .featureLayer({
@@ -114,7 +114,25 @@
               y: 'e_lat'
             }
           },
-
+          // style: function(geoJsonFeature) {
+          //   if (geoJsonFeature.properties.isOrigin) {
+          //     return {
+          //       radius: 6,
+          //       weight: 1,
+          //       color: 'rgb(195, 255, 62)',
+          //       fillColor: 'rgba(255, 103, 31)',
+          //       fillOpacity: 0.8
+          //     };
+          //   } else {
+          //     return {
+          //       radius: 3,
+          //       weight: 0.25,
+          //       color: 'rgb(17, 142, 170)',
+          //       fillColor: 'rgb(0, 51, 160)',
+          //       fillOpacity: 0.7
+          //     };
+          //   }
+          // },
           canvasBezierStyle: {
             type: 'classBreaks',
             field: 'e_Volume',
@@ -164,7 +182,7 @@
           animationDuration: 2000,
           onEachFeature: TooltipName,
         }).addTo(map);
-
+                
         //create tooltip function on hover
         function TooltipName(feature, layer){
         layer.on('mouseover', function (e) {
@@ -187,7 +205,7 @@
         // it is up to the developer to wire up a click or mouseover listener
         // and then call the "selectFeaturesForPathDisplay()" method to inform the layer
         // which Bezier paths need to be drawn
-        oneToManyFlowmapLayer.on('mouseover', function(e) {
+        oneToManyFlowmapLayer.on('click', function(e) {
           if (e.sharedOriginFeatures.length) {
             oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
