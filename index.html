@@ -57,29 +57,33 @@
     var map = L.map('map');
 
     if (L.Browser.mobile) {
-      map.setView([32, 15], 3);
+      map.setView([16, 32], 3);
     } else {
-      map.setView([16, 32], 6);
+      map.setView([16, 31], 6);
     }
 
     L.esri.basemapLayer('Gray').addTo(map);
 
-    // var admn1 = L.esri
-    //     .featureLayer({
-    //       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
-    //       style: { color: "lightgray", weight: 1.5,  dashArray: "2, 3", dashOffset: "2" }
-    //     });
+    var admn1 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 1",
+          style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
+        });
 
-    //     admn1.addTo(map);
+        admn1.addTo(map);
     
     var admn2 = L.esri
         .featureLayer({
           url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 2",
           //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
           style: { color: "gray", weight: 0.25 }
         });
 
         admn2.addTo(map);
+    
+   
 
     Papa.parse('./data/data.csv', {
       download: true,
@@ -114,25 +118,25 @@
               y: 'e_lat'
             }
           },
-          // style: function(geoJsonFeature) {
-          //   if (geoJsonFeature.properties.isOrigin) {
-          //     return {
-          //       radius: 6,
-          //       weight: 1,
-          //       color: 'rgb(195, 255, 62)',
-          //       fillColor: 'rgba(255, 103, 31)',
-          //       fillOpacity: 0.8
-          //     };
-          //   } else {
-          //     return {
-          //       radius: 3,
-          //       weight: 0.25,
-          //       color: 'rgb(17, 142, 170)',
-          //       fillColor: 'rgb(0, 51, 160)',
-          //       fillOpacity: 0.7
-          //     };
-          //   }
-          // },
+          style: function(geoJsonFeature) {
+            if (geoJsonFeature.properties.isOrigin) {
+              return {
+                radius: 6,
+                weight: 1,
+                color: 'rgb(195, 255, 62)',
+                fillColor: 'rgba(255, 103, 31)',
+                fillOpacity: 0.8
+              };
+            } else {
+              return {
+                radius: 3,
+                weight: 0.25,
+                color: 'rgb(17, 142, 170)',
+                fillColor: 'rgb(0, 51, 160)',
+                fillOpacity: 0.7
+              };
+            }
+          },
           canvasBezierStyle: {
             type: 'classBreaks',
             field: 'e_Volume',
@@ -191,7 +195,7 @@
         layer.on('mouseout', function (e) {
         this.closePopup();
         });
-        if (layer._radius===5){
+        if (layer._radius===6){
           layer.bindTooltip("State of Origin: "+feature.properties.s_State );
         }else {
           layer.bindTooltip("Locality of Displacement: "+feature.properties.e_locality);
@@ -205,7 +209,7 @@
         // it is up to the developer to wire up a click or mouseover listener
         // and then call the "selectFeaturesForPathDisplay()" method to inform the layer
         // which Bezier paths need to be drawn
-        oneToManyFlowmapLayer.on('click', function(e) {
+        oneToManyFlowmapLayer.on('mouseover', function(e) {
           if (e.sharedOriginFeatures.length) {
             oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
@@ -225,7 +229,9 @@
 	legend.onAdd = function (map) {
     var legend = L.DomUtil.create('div', 'legend');
 	legend.innerHTML = 
-	'<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
+  '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> State of origin </span>'+'<br/>'+'<br/>'+
+  '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> Locality of diplacement </span>'+'<br/>'+'<br/>'+
+  '<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
 	'<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>'+'<br/>'+
 	'<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>'+'<br/>'+
 	'<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>'+'<br/>'
